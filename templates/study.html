@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Study - MEMERACE AI{% endblock %}
+
+{% block body %}
+<div class="study-page">
+    <div class="study-container">
+        <!-- Header -->
+        <header class="study-header">
+            <a href="/dashboard" class="back-btn">← Back to Dashboard</a>
+            <div class="progress-info">
+                <span id="cardProgress">0 / 0</span>
+                <span id="accuracy">Accuracy: 0%</span>
+            </div>
+        </header>
+
+        <!-- Flashcard Display -->
+        <div class="flashcard-wrapper" style="animation: float 6s infinite;">
+            <div id="flashcard" class="flashcard">
+                <div class="flashcard-inner" style="transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                    <div class="flashcard-front glass-vibrant">
+                        <div class="card-label">📌 KNOWLEDGE DROP</div>
+                        <div id="questionText" class="card-content"
+                            style="font-weight: 700; color: var(--text-primary);">
+                            Loading flashcard...
+                        </div>
+                        <p class="study-instruction">💡 Curiosity peaking? Tap to reveal the secret!</p>
+                        <button id="revealBtn" class="btn-gamified">Reveal Power Up</button>
+                    </div>
+
+                    <div class="flashcard-back glass">
+                        <div class="card-label" style="color: var(--primary-purple);">✨ INSIGHT UNLOCKED</div>
+                        <div id="answerText" class="card-content" style="color: var(--text-primary); font-weight: 600;">
+                            Answer will appear here
+                        </div>
+
+                        <p class="study-instruction">Did you conquer this card?</p>
+                        <div class="response-buttons">
+                            <button id="wrongBtn" class="btn-wrong" style="animation: shake 1s infinite alternate;">❌
+                                Not Yet</button>
+                            <button id="correctBtn" class="btn-correct" style="animation: bounce 2s infinite;">✅
+                                Mastered!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completion Message -->
+        <div id="completionMessage" class="completion-message" style="display: none;">
+            <h2>🎉 Study Session Complete!</h2>
+            <div class="completion-stats">
+                <div class="stat">
+                    <h3 id="totalReviewed">0</h3>
+                    <p>Cards Reviewed</p>
+                </div>
+                <div class="stat">
+                    <h3 id="totalCorrect">0</h3>
+                    <p>Correct Answers</p>
+                </div>
+                <div class="stat">
+                    <h3 id="finalAccuracy">0%</h3>
+                    <p>Accuracy</p>
+                </div>
+            </div>
+
+            <!-- AI Recommendation Section -->
+            <div class="ai-recommendation-section"
+                style="margin-top: 2rem; background: rgba(59, 130, 246, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.3);">
+                <h3 style="color: #60a5fa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>🤖</span> AI Coach Insights
+                </h3>
+                <div id="aiRecommendationText" style="color: #e2e8f0; font-style: italic; margin-bottom: 1rem;">
+                    Generating personalized insights...
+                </div>
+
+                <div id="weakAreasContainer" style="display: none;">
+                    <h4 style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem;">Weak Areas to Focus On:</h4>
+                    <ul id="weakAreasList" style="list-style: none; padding: 0; color: #94a3b8; font-size: 0.9rem;">
+                        <!-- Weak areas will be populated here -->
+                    </ul>
+                </div>
+            </div>
+
+            <div class="completion-actions" style="margin-top: 2rem;">
+                <button class="btn-primary" onclick="window.location.href='/dashboard'">Back to Dashboard</button>
+                <button class="btn-secondary" onclick="location.reload()">Study Again</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification Container -->
+<div id="toast" class="toast-notification"
+    style="visibility: hidden; min-width: 250px; margin-left: -125px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 1; left: 50%; bottom: 30px; font-size: 17px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); transition: visibility 0.5s, all 0.5s ease-in-out;">
+    Review Recorded!
+</div>
+
+<style>
+    .toast-notification.show {
+        visibility: visible !important;
+        bottom: 50px !important;
+        opacity: 1;
+    }
+</style>
+
+<script src="{{ url_for('static', filename='js/flashcard.js') }}"></script>
+{% endblock %}

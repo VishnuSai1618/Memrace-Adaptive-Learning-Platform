@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - AI Flashcard Learning{% endblock %}
+
+{% block body %}
+<div class="landing-page">
+    <!-- Hero Section -->
+    <header class="hero">
+        <nav class="navbar glass">
+            <div class="logo">
+                <h2 style="animation: bounce 2s infinite;">🚀 MEMRACE AI</h2>
+            </div>
+            <div class="nav-links">
+                <a href="/login" class="btn-secondary">Login</a>
+                <a href="/signup" class="btn-primary">Get Started</a>
+            </div>
+        </nav>
+
+        <div class="hero-content">
+            <h1 class="hero-title">Master Anything with<br><span class="gradient-text">AI-Powered Flashcards</span></h1>
+            <p class="hero-subtitle">Upload your notes, let AI create flashcards, and study smarter with spaced
+                repetition</p>
+            <div class="hero-cta">
+                <a href="/signup" class="btn-large btn-primary" style="animation: pulse-success 2s infinite;">Start Learning Free</a>
+                <a href="#features" class="btn-large btn-outline glass-vibrant">Learn More</a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat">
+                    <h3>10,000+</h3>
+                    <p>Students</p>
+                </div>
+                <div class="stat">
+                    <h3>50,000+</h3>
+                    <p>Flashcards</p>
+                </div>
+                <div class="stat">
+                    <h3>95%</h3>
+                    <p>Retention Rate</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2 class="section-title">Powerful Features for Effective Learning</h2>
+
+        <div class="feature-grid">
+            <div class="feature-card glass" style="animation: float 4s infinite;">
+                <div class="feature-icon">🤖</div>
+                <h3>AI-Magic Flashcards</h3>
+                <p>Upload PDFs or paste text, and our AI magically creates high-quality flashcards</p>
+            </div>
+
+            <div class="feature-card glass" style="animation: float 5s infinite 0.5s;">
+                <div class="feature-icon">🔥</div>
+                <h3>Spaced Repetition</h3>
+                <p>Master topics forever with our hyper-efficient review scheduling</p>
+            </div>
+
+            <div class="feature-card glass" style="animation: float 6s infinite 1s;">
+                <div class="feature-icon">🏆</div>
+                <h3>Ranked Quizzes</h3>
+                <p>Test your knowledge and climb the leaderboard with timed challenges</p>
+            </div>
+
+            <div class="feature-card glass" style="animation: float 4.5s infinite 0.2s;">
+                <div class="feature-icon">📊</div>
+                <h3>Level Analytics</h3>
+                <p>Watch your stats grow and unlock new learning achievements</p>
+            </div>
+
+            <div class="feature-card glass" style="animation: float 5.5s infinite 0.7s;">
+                <div class="feature-icon">💎</div>
+                <h3>The Vault</h3>
+                <p>Explore a treasure trove of community-created learning decks</p>
+            </div>
+
+            <div class="feature-card glass" style="animation: float 6.5s infinite 1.2s;">
+                <div class="feature-icon">🌟</div>
+                <h3>AI-Coach</h3>
+                <p>Get elite-level study advice customized to your learning style</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Upload Content</h3>
+                <p>Upload your study materials as PDF or paste text directly</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>AI Generates Cards</h3>
+                <p>Our AI analyzes content and creates flashcards automatically</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Study & Review</h3>
+                <p>Study flashcards with optimized spaced repetition scheduling</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Track Progress</h3>
+                <p>Monitor your performance and get personalized recommendations</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Transform Your Learning?</h2>
+        <p>Join thousands of students who are studying smarter, not harder</p>
+        <a href="/signup" class="btn-large btn-primary">Get Started Now</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 MEMRACE AI. Powered by Google Gemini.</p>
+    </footer>
+</div>
+{% endblock %}

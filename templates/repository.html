@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Public Repository - MEMRACE AI{% endblock %}
+
+{% block body %}
+<div class="dashboard-page">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🧠 MEMRACE</h2>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="/upload" class="nav-item">
+                <span class="nav-icon">📤</span>
+                <span>Upload Content</span>
+            </a>
+            <a href="/analytics" class="nav-item">
+                <span class="nav-icon">📈</span>
+                <span>Analytics</span>
+            </a>
+            <a href="/repository" class="nav-item active">
+                <span class="nav-icon">🌐</span>
+                <span>Public Repository</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button id="logoutBtn" class="btn-secondary btn-full">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="content-header" style="margin-bottom: var(--spacing-lg);">
+            <h1 style="font-size: 3rem; color: var(--primary-purple); margin-bottom: 0.5rem;">Public Vault</h1>
+            <p style="color: var(--text-secondary); font-size: 1.2rem;">Discover and clone knowledge shared by the
+                community 🌍</p>
+        </header>
+
+        <!-- Search and Filter -->
+        <section class="search-section" style="margin-bottom: var(--spacing-lg);">
+            <div class="glass"
+                style="padding: 1rem; border-radius: var(--radius-md); border: 1px solid rgba(255,152,0,0.2);">
+                <input type="text" id="searchInput" placeholder="Search knowledge treasures..." class="search-input"
+                    style="background: transparent; border: none; color: var(--text-primary); width: 100%; font-size: 1.1rem; outline: none;">
+            </div>
+        </section>
+
+        <!-- Public Decks Grid -->
+        <section class="repository-grid" id="publicDecksList">
+            <p>Loading public decks...</p>
+        </section>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-icon">📚</div>
+            <h3>No Public Decks Yet</h3>
+            <p>Be the first to share your flashcards with the community!</p>
+            <a href="/dashboard" class="btn-primary">Go to Dashboard</a>
+        </div>
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/repository.js') }}"></script>
+{% endblock %}

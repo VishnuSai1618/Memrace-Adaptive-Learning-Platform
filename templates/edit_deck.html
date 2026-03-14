@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Deck - MEMRACE AI{% endblock %}
+
+{% block body %}
+<div class="dashboard-page">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🧠 MEMRACE</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="/upload" class="nav-item">
+                <span class="nav-icon">📤</span>
+                <span>Upload Content</span>
+            </a>
+            <a href="/analytics" class="nav-item">
+                <span class="nav-icon">📈</span>
+                <span>Analytics</span>
+            </a>
+            <a href="/repository" class="nav-item">
+                <span class="nav-icon">🌐</span>
+                <span>Public Repository</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="logoutBtn" class="btn-secondary btn-full">Logout</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="content-header" style="margin-bottom: var(--spacing-lg);">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,152,0,0.05); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(255,152,0,0.1);">
+                <div>
+                    <h1 id="deckTitleHeading"
+                        style="font-size: 3rem; margin-bottom: 0.5rem; color: var(--primary-purple);">Loading Deck...
+                    </h1>
+                    <p id="deckDescripText" style="font-size: 1.2rem; color: var(--text-secondary);"></p>
+                </div>
+            </div>
+        </header>
+
+        <div style="margin-bottom: var(--spacing-lg);">
+            <div class="toggle-buttons">
+                <button id="flashcardBtn" class="toggle-btn active">📚 Flashcards</button>
+                <button id="quizBtn" class="toggle-btn">❓ Quizzes</button>
+            </div>
+        </div>
+
+        <div id="loadingIndicator" class="loading-indicator" style="display: block;">
+            <div class="spinner"></div>
+            <p>Loading Deck Content...</p>
+        </div>
+
+        <!-- Flashcards Section -->
+        <section id="flashcardsSection" style="display: none;">
+            <div id="flashcardsList" class="decks-grid"
+                style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                <!-- Flashcards will be injected here -->
+            </div>
+            <div
+                style="margin-top: var(--spacing-lg); background: var(--dark-card); padding: 2rem; border-radius: var(--radius-md); border: 1px solid rgba(255,152,0,0.2);">
+                <h3 style="margin-bottom: var(--spacing-sm); color: var(--accent-orange);">Add New Flashcard</h3>
+                <form id="addFlashcardForm">
+                    <div class="form-group">
+                        <label for="newFcQuestion">Front (Question)</label>
+                        <textarea id="newFcQuestion" rows="2" required placeholder="Type question here..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="newFcAnswer">Back (Answer)</label>
+                        <textarea id="newFcAnswer" rows="2" required placeholder="Type answer here..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-gamified">Add Flashcard</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Quizzes Section -->
+        <section id="quizzesSection" style="display: none;">
+            <div id="quizzesList" class="decks-grid"
+                style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                <!-- Quizzes will be injected here -->
+            </div>
+            <div
+                style="margin-top: var(--spacing-lg); background: var(--dark-card); padding: 2rem; border-radius: var(--radius-md); border: 1px solid rgba(59,130,246,0.2);">
+                <h3 style="margin-bottom: var(--spacing-sm); color: var(--accent-blue);">Add New Quiz Question</h3>
+                <form id="addQuizForm">
+                    <div class="form-group">
+                        <label for="newQuizQues">Question</label>
+                        <textarea id="newQuizQues" rows="2" required placeholder="Type question here..."></textarea>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
+                        <div class="form-group">
+                            <label for="optA">Option A</label>
+                            <input type="text" id="optA" required placeholder="Option A text">
+                        </div>
+                        <div class="form-group">
+                            <label for="optB">Option B</label>
+                            <input type="text" id="optB" required placeholder="Option B text">
+                        </div>
+                        <div class="form-group">
+                            <label for="optC">Option C</label>
+                            <input type="text" id="optC" required placeholder="Option C text">
+                        </div>
+                        <div class="form-group">
+                            <label for="optD">Option D</label>
+                            <input type="text" id="optD" required placeholder="Option D text">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: var(--spacing-md);">
+                        <label for="correctAns">Correct Answer</label>
+                        <select id="correctAns" required
+                            style="width: 100%; padding: 0.75rem; background: var(--dark-bg); border: 1px solid var(--dark-border); border-radius: var(--radius-sm); color: var(--text-primary);">
+                            <option value="A">Option A</option>
+                            <option value="B">Option B</option>
+                            <option value="C">Option C</option>
+                            <option value="D">Option D</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-gamified"
+                        style="background: linear-gradient(135deg, var(--accent-blue) 0%, #1e3a8a 100%);">Add Quiz
+                        Question</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Edit Modal -->
+        <div id="editModal"
+            style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+            <div
+                style="background: var(--dark-card); padding: 2rem; border-radius: var(--radius-lg); width: 90%; max-width: 600px; border: 1px solid var(--primary-purple);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 id="modalTitle" style="color: var(--primary-purple);">Edit Item</h2>
+                    <button onclick="closeEditModal()"
+                        style="background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;">&times;</button>
+                </div>
+                <div id="modalContent">
+                    <!-- Dynamic form injected via JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Output deck_id so JS can read it -->
+<script>
+    const currentDeckId = {{ deck_id }};
+</script>
+<script src="{{ url_for('static', filename='js/edit_deck.js') }}"></script>
+{% endblock %}

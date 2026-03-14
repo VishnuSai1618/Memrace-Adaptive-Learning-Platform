@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Content - MEMRACE AI{% endblock %}
+
+{% block body %}
+<div class="dashboard-page">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🧠 MEMERACE</h2>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="/upload" class="nav-item active">
+                <span class="nav-icon">📤</span>
+                <span>Upload Content</span>
+            </a>
+            <a href="/analytics" class="nav-item">
+                <span class="nav-icon">📈</span>
+                <span>Analytics</span>
+            </a>
+            <a href="/repository" class="nav-item">
+                <span class="nav-icon">🌐</span>
+                <span>Public Repository</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button id="logoutBtn" class="btn-secondary btn-full">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="content-header">
+            <h1>Upload Study Material</h1>
+            <p>Upload a PDF or paste your notes to generate flashcards</p>
+        </header>
+
+        <div class="upload-container">
+            <!-- Content Type Toggle -->
+            <div class="toggle-buttons">
+                <button id="pdfToggle" class="toggle-btn active">📄 Upload PDF</button>
+                <button id="textToggle" class="toggle-btn">📝 Paste Text</button>
+                <button id="blankToggle" class="toggle-btn">✨ Blank Deck</button>
+            </div>
+
+            <!-- PDF Upload Section -->
+            <div id="pdfSection" class="upload-section">
+                <form id="pdfUploadForm">
+                    <div class="form-group">
+                        <label for="deckTitle">Deck Title</label>
+                        <input type="text" id="deckTitle" required placeholder="e.g., Biology Chapter 5">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deckDescription">Description (Optional)</label>
+                        <textarea id="deckDescription" rows="2" placeholder="Brief description of this deck"></textarea>
+                    </div>
+
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <input type="file" id="pdfFile" accept=".pdf" hidden>
+                        <div class="upload-placeholder">
+                            <div class="upload-icon">📁</div>
+                            <p>Drag and drop your PDF here</p>
+                            <p class="upload-hint">or</p>
+                            <button type="button" class="btn-primary"
+                                onclick="document.getElementById('pdfFile').click()">Browse Files</button>
+                            <p class="upload-limit">Maximum file size: 16MB</p>
+                        </div>
+                        <div id="fileInfo" class="file-info" style="display: none;">
+                            <p id="fileName"></p>
+                            <button type="button" class="btn-secondary" onclick="clearFile()">Remove</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-large">Upload & Generate Flashcards</button>
+                </form>
+            </div>
+
+            <div id="textSection" class="upload-section" style="display: none;">
+                <form id="textUploadForm">
+                    <div class="form-group">
+                        <label for="textDeckTitle">Deck Title</label>
+                        <input type="text" id="textDeckTitle" required placeholder="e.g., History Notes">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="textDeckDescription">Description (Optional)</label>
+                        <textarea id="textDeckDescription" rows="2"
+                            placeholder="Brief description of this deck"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="textContent">Paste Your Notes</label>
+                        <textarea id="textContent" rows="12" required
+                            placeholder="Paste your study material here..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-large">Save & Generate Flashcards</button>
+                </form>
+            </div>
+
+            <!-- Blank Deck Section -->
+            <div id="blankSection" class="upload-section" style="display: none;">
+                <form id="blankDeckForm">
+                    <div class="form-group">
+                        <label for="blankDeckTitle">Deck Title</label>
+                        <input type="text" id="blankDeckTitle" required placeholder="e.g., My Custom Deck">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="blankDeckDescription">Description (Optional)</label>
+                        <textarea id="blankDeckDescription" rows="2"
+                            placeholder="Brief description of this deck"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-large">Create Blank Deck</button>
+                </form>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+                <div class="spinner"></div>
+                <p>Processing your content and generating flashcards...</p>
+            </div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="success-message" style="display: none;">
+                <p>✅ Deck created successfully!</p>
+                <button class="btn-primary" onclick="window.location.href='/dashboard'">Go to Dashboard</button>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+        </div>
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+{% endblock %}

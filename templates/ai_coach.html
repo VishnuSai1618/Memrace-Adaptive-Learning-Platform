@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}AI Coach Insights - FlashLearn{% endblock %}
+
+{% block body %}
+<div class="dashboard-page">
+    <!-- Sidebar Navigation (Reused) -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🧠 MEMRACE </h2>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="/upload" class="nav-item">
+                <span class="nav-icon">📤</span>
+                <span>Upload Content</span>
+            </a>
+            <a href="/analytics" class="nav-item">
+                <span class="nav-icon">📈</span>
+                <span>Analytics</span>
+            </a>
+            <a href="/ai-coach" class="nav-item active">
+                <span class="nav-icon">🤖</span>
+                <span>AI Coach Insights</span>
+            </a>
+            <a href="/repository" class="nav-item">
+                <span class="nav-icon">🌐</span>
+                <span>Public Repository</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button id="logoutBtn" class="btn-secondary btn-full">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="content-header">
+            <h1>AI Coach Insights</h1>
+            <p>Your personalized study roadmap</p>
+        </header>
+
+        <div class="coach-container" style="display: grid; gap: 2rem;">
+            <!-- Main Insight Card -->
+            <section class="insight-card"
+                style="background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(30,58,138,0.2) 100%); padding: 2rem; border-radius: 16px; border: 1px solid rgba(59,130,246,0.2);">
+                <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+                    <div style="font-size: 3rem;">🤖</div>
+                    <div>
+                        <h2 style="color: #60a5fa; margin-bottom: 1rem;">Coach's Message</h2>
+                        <p id="coachMessage"
+                            style="font-size: 1.1rem; line-height: 1.6; color: #e2e8f0; font-style: italic;">
+                            Connecting to AI Coach...
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Weak Areas Analysis -->
+            <section class="weak-areas-detailed">
+                <h2 style="margin-bottom: 1.5rem;">Targeted Improvements</h2>
+                <div id="weakAreasList"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <!-- Items will be populated here -->
+                    <div style="color: #94a3b8;">Loading analysis...</div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const response = await fetch('/api/recommendations/');
+            const data = await response.json();
+
+            // Update Coach Message
+            const coachMsg = document.getElementById('coachMessage');
+            if (data.recommendation) {
+                coachMsg.textContent = `"${data.recommendation}"`;
+                coachMsg.style.fontStyle = 'normal';
+            } else {
+                coachMsg.textContent = "Keep studying to unlock AI insights!";
+            }
+
+            // Update Weak Areas
+            const list = document.getElementById('weakAreasList');
+            if (data.weak_topics && data.weak_topics.length > 0) {
+                list.innerHTML = '';
+                data.weak_topics.forEach(topic => {
+                    const card = document.createElement('div');
+                    card.className = 'weak-area-card';
+                    card.style.cssText = `
+                    background: #1e293b;
+                    padding: 1.5rem;
+                    border-radius: 12px;
+                    border-left: 4px solid #ef4444;
+                `;
+
+                    card.innerHTML = `
+                    <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">${topic.deck_title}</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <span style="color: #94a3b8;">Accuracy</span>
+                        <span style="font-weight: bold; color: #ef4444;">${topic.accuracy}%</span>
+                    </div>
+                    <div style="background: #334155; height: 6px; border-radius: 3px; margin-bottom: 1rem;">
+                        <div style="width: ${topic.accuracy}%; background: #ef4444; height: 100%; border-radius: 3px;"></div>
+                    </div>
+                    <a href="/study/${topic.deck_id}" class="btn-secondary" style="width: 100%; text-align: center; display: block;">Study Now</a>
+                `;
+                    list.appendChild(card);
+                });
+            } else {
+                list.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 2rem; background: #1e293b; border-radius: 12px;">
+                    <h3>🎉 No weak areas detected!</h3>
+                    <p style="color: #94a3b8;">You're doing great. Try creating a new deck to challenge yourself.</p>
+                </div>
+            `;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('coachMessage').textContent = "Failed to load AI insights. Please check your connection.";
+        }
+
+        // Logout Logic (Copied from dashboard)
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                await fetch('/api/auth/logout');
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Error logging out:', error);
+            }
+        });
+    });
+</script>
+{% endblock %}

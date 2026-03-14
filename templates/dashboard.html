@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - MEMRACE AI{% endblock %}
+
+{% block body %}
+<div class="dashboard-page">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2 style="animation: float 3s infinite;">🚀 MEMRACE</h2>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item active">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="/upload" class="nav-item">
+                <span class="nav-icon">📤</span>
+                <span>Upload Content</span>
+            </a>
+            <a href="/analytics" class="nav-item">
+                <span class="nav-icon">📈</span>
+                <span>Analytics</span>
+            </a>
+            <a href="/ai-coach" class="nav-item">
+                <span class="nav-icon">🤖</span>
+                <span>AI Coach Insights</span>
+            </a>
+            <a href="/repository" class="nav-item">
+                <span class="nav-icon">🌐</span>
+                <span>Public Repository</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button id="logoutBtn" class="btn-secondary btn-full">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="content-header" style="margin-bottom: var(--spacing-lg);">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,152,0,0.05); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(255,152,0,0.1);">
+                <div>
+                    <h1 style="font-size: 3rem; margin-bottom: 0.5rem; color: var(--primary-purple);">Dashboard</h1>
+                    <p id="welcomeMessage" style="font-size: 1.2rem; color: var(--text-secondary);">Welcome back, Master
+                        of Knowledge! 🏆</p>
+                </div>
+                <!-- XP / Level Indicator -->
+                <div class="glass-vibrant"
+                    style="padding: 1.5rem; border-radius: var(--radius-md); text-align: right; min-width: 250px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                        <span id="userLevel"
+                            style="font-weight: 800; color: var(--accent-orange); letter-spacing: 1px;">LEVEL 1</span>
+                        <span id="userXp" style="color: var(--text-muted); font-size: 0.85rem;">0 / 1,000 XP</span>
+                    </div>
+                    <div
+                        style="width: 100%; height: 10px; background: rgba(255,255,255,0.05); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,152,0,0.2);">
+                        <div id="xpProgressBar"
+                            style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-purple), var(--primary-indigo)); border-radius: 5px; box-shadow: 0 0 10px rgba(255,152,0,0.4);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Overview -->
+        <section class="stats-grid" style="grid-template-columns: repeat(5, 1fr);">
+            <div class="stat-card glass" style="border-bottom: 4px solid var(--primary-purple);">
+                <div class="stat-icon">📚</div>
+                <div class="stat-info">
+                    <h3 id="totalDecks">0</h3>
+                    <p>Knowledge Decks</p>
+                </div>
+            </div>
+
+            <div class="stat-card glass" style="border-bottom: 4px solid var(--accent-orange);">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-info">
+                    <h3 id="dailyStreak">0</h3>
+                    <p>Daily Streak</p>
+                </div>
+            </div>
+
+            <div class="stat-card glass" style="border-bottom: 4px solid var(--accent-green);">
+                <div class="stat-icon">📖</div>
+                <div class="stat-info">
+                    <h3 id="masteredCards">0</h3>
+                    <p>Cards Mastered</p>
+                </div>
+            </div>
+
+            <div class="stat-card glass" style="border-bottom: 4px solid var(--accent-yellow);">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-info">
+                    <h3 id="masteryRank" style="font-size: 1.4rem;">Beginner</h3>
+                    <p>Mastery Rank</p>
+                </div>
+            </div>
+
+            <div class="stat-card glass" style="border-bottom: 4px solid var(--accent-blue);">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-info">
+                    <h3 id="accuracy">0%</h3>
+                    <p>Power Level</p>
+                </div>
+            </div>
+        </section>
+
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--spacing-lg);">
+            <!-- Recommendations -->
+            <section class="recommendations">
+                <h2
+                    style="margin-bottom: var(--spacing-sm); display: flex; align-items: center; gap: 0.5rem; color: var(--primary-purple);">
+                    <span>🧠</span> AI Insights
+                </h2>
+                <div id="recommendationsContent" class="recommendation-box glass"
+                    style="padding: 2rem; min-height: 400px; border: 1px solid rgba(255,152,0,0.1);">
+                    <p style="color: var(--text-muted);">Loading your personalized path...</p>
+                </div>
+            </section>
+
+            <!-- My Decks -->
+            <section class="decks-section">
+                <div class="section-header" style="margin-bottom: var(--spacing-sm);">
+                    <h2 style="display: flex; align-items: center; gap: 0.5rem; color: var(--primary-purple);">
+                        <span>📦</span> Your Vault
+                    </h2>
+                    <div>
+                        <a href="/upload" class="btn-gamified">+ Create New</a>
+                        <a href="/live/join" class="btn-primary"
+                            style="margin-left: 10px; background: var(--accent-orange);">Join Live Session</a>
+                    </div>
+                </div>
+                <div id="decksList" class="decks-grid"
+                    style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
+                    <p style="color: var(--text-muted);">Opening the vault...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

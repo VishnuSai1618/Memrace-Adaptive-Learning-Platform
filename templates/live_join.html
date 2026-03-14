@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Join Live Quiz - MEMRACE AI{% endblock %}
+
+{% block body %}
+<div class="landing-page" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div class="auth-container glass" style="max-width: 400px; width: 100%; text-align: center; padding: 2rem;">
+        <h1 style="color: var(--primary-purple); font-size: 2.5rem; margin-bottom: 2rem;">Join Game</h1>
+
+        <div id="joinError" style="color: var(--accent-red); margin-bottom: 1rem; display: none;"></div>
+
+        <form id="joinForm" onsubmit="handleJoin(event)">
+            <div class="form-group">
+                <input type="text" id="gamePin" class="form-control" placeholder="Game PIN" required
+                    style="font-size: 1.5rem; text-align: center; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;"
+                    maxlength="6">
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="nickname" class="form-control" placeholder="Nickname" required
+                    style="font-size: 1.2rem; text-align: center;">
+            </div>
+
+            <button type="submit" class="btn-primary"
+                style="width: 100%; font-size: 1.2rem; margin-top: 1rem; padding: 1rem;">
+                Enter
+            </button>
+        </form>
+
+        <div style="margin-top: 2rem;">
+            <a href="/dashboard" style="color: var(--text-muted); text-decoration: none;">Take me back to Dashboard</a>
+        </div>
+    </div>
+</div>
+
+<!-- Socket.IO Client -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+<script>
+    function handleJoin(e) {
+        e.preventDefault();
+
+        const pin = document.getElementById('gamePin').value.toUpperCase();
+        const nickname = document.getElementById('nickname').value;
+        const errorDiv = document.getElementById('joinError');
+
+        if (pin.length !== 6) {
+            errorDiv.textContent = "PIN must be 6 characters long";
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        // Disable button while connecting
+        const btn = document.querySelector('button[type="submit"]');
+        btn.textContent = 'Connecting...';
+        btn.disabled = true;
+
+        // Initialize socket connection
+        const socket = io();
+
+        socket.on('connect', () => {
+            // Send join request
+            socket.emit('player_join', {
+                pin: pin,
+                display_name: nickname,
+                user_id: null // Unauthenticated users can join
+            });
+        });
+
+        socket.on('join_error', (data) => {
+            errorDiv.textContent = data.message;
+            errorDiv.style.display = 'block';
+            btn.textContent = 'Enter';
+            btn.disabled = false;
+            socket.disconnect();
+        });
+
+        socket.on('join_success', (data) => {
+            // Save participation data to sessionStorage so the player page can reconstruct state
+            sessionStorage.setItem('live_game_pin', pin);
+            sessionStorage.setItem('live_participant_id', data.participant_id);
+            sessionStorage.setItem('live_session_id', data.session_id);
+            sessionStorage.setItem('live_nickname', nickname);
+
+            // Redirect to player view
+            window.location.href = `/live/player/${data.session_id}`;
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz - MEMRACE AI{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ═══════════════════════════════════════════════
+   MEMRACE DECK QUIZ  —  Live-Quiz Design System
+   ═══════════════════════════════════════════════ */
+
+/* Override base.html body for fullscreen quiz feel */
+.quiz-page {
+  min-height: 100vh;
+  background: #0d0221;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+}
+
+/* ── Top Bar ── */
+.quiz-topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(0,0,0,0.35);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar-back {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+.topbar-back:hover { color: white; }
+.topbar-progress {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.5px;
+}
+
+/* Timer SVG ring */
+.timer-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+}
+.timer-circle {
+  transform: rotate(-90deg);
+}
+.timer-bg {
+  fill: none;
+  stroke: rgba(255,255,255,0.08);
+  stroke-width: 4;
+}
+.timer-progress {
+  fill: none;
+  stroke: #7c3aed;
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.4s ease, stroke 0.3s;
+}
+.timer-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 900;
+  color: white;
+}
+
+/* ── Quiz Container ── */
+.quiz-container {
+  width: 100%;
+  max-width: 900px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.5rem 2rem;
+}
+
+/* ── Question Card ── */
+.question-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(10px);
+  animation: fadeUp 0.4s ease-out;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.question-card h2 {
+  font-size: 1.8rem !important;
+  font-weight: 800 !important;
+  line-height: 1.3;
+  color: white !important;
+  -webkit-text-fill-color: white !important;
+}
+
+/* ── 2×2 Options Grid ── */
+.options-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-rows: auto auto !important;
+  gap: 1rem !important;
+}
+
+/* ── Option Buttons ── */
+.quiz-option {
+  border: none !important;
+  border-radius: 14px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  padding: 1.5rem 1.75rem !important;
+  color: white !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  transition: transform 0.15s, box-shadow 0.15s !important;
+  box-shadow: 0 7px 0 rgba(0,0,0,0.3) !important;
+  min-height: 120px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  text-align: left !important;
+  background: rgba(255,255,255,0.08) !important;
+}
+.quiz-option:active {
+  transform: translateY(6px) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.3) !important;
+}
+.quiz-option:hover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.06);
+}
+
+/* Color coding per option — applied by JS index */
+.quiz-option:nth-child(1) { background-color: #E21B3C !important; }
+.quiz-option:nth-child(2) { background-color: #1368CE !important; }
+.quiz-option:nth-child(3) { background-color: #D89E00 !important; }
+.quiz-option:nth-child(4) { background-color: #26890C !important; }
+
+/* Shape icon for option label */
+.option-label {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 44px !important;
+  height: 44px !important;
+  background: rgba(255,255,255,0.25) !important;
+  font-size: 1.1rem !important;
+  font-weight: 900 !important;
+  flex-shrink: 0;
+  color: white !important;
+  border-radius: 6px;
+}
+/* Shapes per label */
+.quiz-option:nth-child(1) .option-label {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  border-radius: 0;
+}
+.quiz-option:nth-child(2) .option-label {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  border-radius: 0;
+}
+.quiz-option:nth-child(3) .option-label {
+  border-radius: 50%;
+}
+.quiz-option:nth-child(4) .option-label {
+  border-radius: 6px;
+}
+
+.option-text {
+  flex: 1;
+  line-height: 1.3;
+}
+
+/* ── Correct / Incorrect Feedback ── */
+.quiz-option.correct {
+  background-color: #059669 !important;
+  box-shadow: 0 0 30px rgba(5,150,105,0.5) !important;
+  transform: scale(1.03);
+}
+.quiz-option.correct::before {
+  content: '✓';
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+.quiz-option.incorrect {
+  background-color: #991b1b !important;
+  box-shadow: 0 0 20px rgba(153,27,27,0.4) !important;
+  opacity: 0.7;
+}
+.quiz-option.incorrect::before {
+  content: '✗';
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+/* ── Results Screen ── */
+.results-screen {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  animation: fadeUp 0.5s ease-out;
+}
+.results-screen h2 {
+  font-size: 2.5rem !important;
+  font-weight: 900 !important;
+  margin-bottom: 2rem;
+  color: white !important;
+  -webkit-text-fill-color: white !important;
+}
+
+.results-stats {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+.results-stats .stat {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  min-width: 140px;
+  backdrop-filter: blur(10px);
+}
+.results-stats .stat h3 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #c4b5fd;
+  margin-bottom: 0.25rem;
+}
+.results-stats .stat p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.results-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+.results-actions button {
+  padding: 0.85rem 1.8rem !important;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  cursor: pointer !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+  border: none !important;
+}
+.results-actions .btn-primary {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(124,58,237,0.35) !important;
+}
+.results-actions .btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(124,58,237,0.5) !important;
+}
+.results-actions .btn-secondary {
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  color: white !important;
+}
+.results-actions .btn-secondary:hover {
+  background: rgba(255,255,255,0.14) !important;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="quiz-page">
+
+  <!-- ── Top Bar ── -->
+  <div class="quiz-topbar">
+    <a href="/dashboard" class="topbar-back">← Back</a>
+    <span id="questionProgress" class="topbar-progress">Question 0 / 0</span>
+    <div class="timer-wrap">
+      <svg class="timer-circle" width="52" height="52" viewBox="0 0 52 52">
+        <circle class="timer-bg" cx="26" cy="26" r="22"></circle>
+        <circle id="timerCircle" class="timer-progress" cx="26" cy="26" r="22"></circle>
+      </svg>
+      <span id="timerText" class="timer-text">30</span>
+    </div>
+  </div>
+
+  <!-- ── Quiz Content ── -->
+  <div class="quiz-container">
+    <div id="quizContent">
+      <div class="question-card">
+        <h2 id="questionText">Loading quiz…</h2>
+      </div>
+      <div id="optionsContainer" class="options-grid">
+        <!-- Options rendered by quiz.js -->
+      </div>
+    </div>
+
+    <!-- ── Results ── -->
+    <div id="resultsScreen" class="results-screen" style="display: none;">
+      <h2>🎯 Quiz Complete!</h2>
+      <div class="results-stats">
+        <div class="stat">
+          <h3 id="totalQuestions">0</h3>
+          <p>Questions</p>
+        </div>
+        <div class="stat">
+          <h3 id="correctAnswers">0</h3>
+          <p>Correct</p>
+        </div>
+        <div class="stat">
+          <h3 id="quizAccuracy">0%</h3>
+          <p>Score</p>
+        </div>
+      </div>
+      <div class="results-actions">
+        <button class="btn-primary" onclick="window.location.href='/dashboard'">Back to Dashboard</button>
+        <button class="btn-secondary" onclick="location.reload()">Retake Quiz</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+{% endblock %}

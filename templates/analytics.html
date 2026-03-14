@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - MEMRACE AI{% endblock %}
+
+{% block body %}
+<div class="dashboard-page">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🧠 MEMRACE</h2>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="/upload" class="nav-item">
+                <span class="nav-icon">📤</span>
+                <span>Upload Content</span>
+            </a>
+            <a href="/analytics" class="nav-item active">
+                <span class="nav-icon">📈</span>
+                <span>Analytics</span>
+            </a>
+            <a href="/repository" class="nav-item">
+                <span class="nav-icon">🌐</span>
+                <span>Public Repository</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button id="logoutBtn" class="btn-secondary btn-full">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="content-header">
+            <h1>Performance Analytics</h1>
+            <p>Track your learning progress and identify areas for improvement</p>
+        </header>
+
+        <!-- Overall Stats -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📝</div>
+                <div class="stat-info">
+                    <h3 id="totalReviews">0</h3>
+                    <p>Total Reviews</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <h3 id="correctReviews">0</h3>
+                    <p>Correct Reviews</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-info">
+                    <h3 id="overallAccuracy">0%</h3>
+                    <p>Overall Accuracy</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-info">
+                    <h3 id="avgResponseTime">0s</h3>
+                    <p>Avg Response Time</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Weak Topics -->
+        <section class="weak-topics-section" style="margin-top: 2rem;">
+            <div class="section-header">
+                <h2>🎯 Areas for Improvement</h2>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Focus on these topics to boost your overall
+                    performance</p>
+            </div>
+            <div id="weakTopicsList" class="weak-topics-list">
+                <p style="color: var(--text-secondary);">Loading weak topics...</p>
+            </div>
+        </section>
+
+        <!-- Deck Performance -->
+        <section class="deck-performance-section" style="margin-top: 2rem;">
+            <div class="section-header">
+                <h2>📚 Performance by Deck</h2>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Detailed breakdown of your accuracy across
+                    all decks</p>
+            </div>
+            <div id="deckPerformanceList" class="deck-performance-list">
+                <p style="color: var(--text-secondary);">Loading deck performance...</p>
+            </div>
+        </section>
+
+        <!-- Daily Activity -->
+        <section class="daily-activity-section" style="margin-top: 2rem;">
+            <div class="section-header">
+                <h2>📅 Daily Activity (Last 30 Days)</h2>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Your study consistency over time</p>
+            </div>
+            <div id="dailyActivityChart" class="activity-chart">
+                <p style="color: var(--text-secondary);">Loading activity data...</p>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+{% endblock %}

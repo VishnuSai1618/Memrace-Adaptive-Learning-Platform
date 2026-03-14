@@ -1,0 +1,26 @@
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+Flask-Login==0.6.3
+Werkzeug==3.0.1
+PyPDF2==3.0.1
+google-generativeai==0.3.2
+python-dotenv==1.0.0
+Flask-SocketIO==5.3.6
+eventlet==0.35.1
+
+
+CONTENTS	Page No.
+List of Figures		
+List of Tables		
+Abbreviations		
+Chapter 1		
+		
+
+AIzaSyCcAbygXZHAz2roA_imBaGr1itZ_7iSaFA
+AIzaSyCTPjzzdLv4ZPGXVCArMD6xYifDv7m__Oc
+AIzaSyBFrIsykLePk7xh6BetKoT216WeKZKWu8k
+
+
+AIzaSyCcAbygXZHAz2roA_imBaGr1itZ_7iSaFA
+AIzaSyCTPjzzdLv4ZPGXVCArMD6xYifDv7m__Oc
+AIzaSyBFrIsykLePk7xh6BetKoT216WeKZKWu8k
