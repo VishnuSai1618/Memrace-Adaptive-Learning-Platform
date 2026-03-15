@@ -90,14 +90,7 @@ def register_events(socketio):
                         idx = live_session.current_question_index
                         if 0 <= idx < len(quizzes):
                             q = quizzes[idx]
-                            question_data = {
-                                'quiz_id': q.id,
-                                'question': q.question,
-                                'options': [q.option_a, q.option_b, q.option_c, q.option_d],
-                                'question_number': idx + 1,
-                                'total_questions': len(quizzes)
-                            }
-                            emit('new_question', {'question': question_data, 'index': idx})
+                            emit('new_question', {'question': q.to_dict(), 'index': idx})
                             print(f"Reconnect sync: sent question {idx} to participant {participant_id}")
         except Exception as e:
             print(f"Error in player_rejoin: {e}")
