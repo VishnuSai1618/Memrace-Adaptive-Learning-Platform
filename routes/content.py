@@ -3,7 +3,7 @@ from models import db
 from models.deck import Deck
 from models.flashcard import Flashcard
 from models.quiz import Quiz
-from services.pdf_extractor import PDFExtractor
+from services.document_extractor import DocumentExtractor
 from services.ai_generator import AIGenerator
 from routes.auth import login_required
 
@@ -49,33 +49,33 @@ def create_deck():
 @content_bp.route('/upload', methods=['POST'])
 @login_required
 def upload_content():
-    """Upload PDF or text content and create a deck"""
+    """Upload a document (PDF, DOCX, PPTX, TXT) or paste text to create a deck"""
     try:
         user_id = session['user_id']
         
         # Check if it's a file upload or text paste
         if 'file' in request.files:
-            # PDF upload
+            # Document upload
             file = request.files['file']
             title = request.form.get('title', 'Untitled Deck')
             description = request.form.get('description', '')
             
-            # Process PDF
-            file_path, extracted_text = PDFExtractor.process_pdf_upload(file)
+            # Process document (validates, saves, extracts text)
+            file_path, extracted_text, source_type = DocumentExtractor.process_upload(file)
             
             # Create deck
             deck = Deck(
                 user_id=user_id,
                 title=title,
                 description=description,
-                source_type='pdf',
+                source_type=source_type,
                 original_content=extracted_text
             )
             db.session.add(deck)
             db.session.commit()
             
             return jsonify({
-                'message': 'PDF uploaded successfully',
+                'message': f'{source_type.upper()} uploaded successfully',
                 'deck': deck.to_dict(),
                 'content_preview': extracted_text[:200] + '...'
             }), 201

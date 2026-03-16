@@ -24,7 +24,7 @@ class Config:
     # File upload settings
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max file size
     UPLOAD_FOLDER = 'uploads'
-    ALLOWED_EXTENSIONS = {'pdf', 'txt'}
+    ALLOWED_EXTENSIONS = {'pdf', 'docx', 'pptx', 'txt'}
     
     # Session settings
     PERMANENT_SESSION_LIFETIME = 86400  # 24 hours

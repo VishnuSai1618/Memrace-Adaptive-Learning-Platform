@@ -4,6 +4,7 @@ from models import db
 from models.flashcard import Flashcard, FlashcardReview
 from models.quiz import QuizAttempt, Quiz
 from models.deck import Deck
+from typing import Any, Dict, List, Union
 
 class RecommendationEngine:
     """Generate personalized study recommendations based on user performance"""
@@ -46,27 +47,30 @@ class RecommendationEngine:
             .group_by(Deck.id, Deck.title).all()
 
             # Merge stats
-            deck_performance = {}
+            # Type annotation prevents Pyre2 from creating massive union types
+            deck_performance: Dict[int, Dict[str, Any]] = {}
 
             for deck_id, title, total, correct in fc_stats:
-                deck_performance[deck_id] = {
-                    'deck_id': deck_id,
-                    'deck_title': title,
-                    'total_reviews': total,
-                    'correct_reviews': correct or 0
+                d_id = int(deck_id)
+                deck_performance[d_id] = {
+                    'deck_id': d_id,
+                    'deck_title': str(title),
+                    'total_reviews': int(total),
+                    'correct_reviews': int(correct or 0)
                 }
 
             for deck_id, title, total, correct in quiz_stats:
-                if deck_id not in deck_performance:
-                    deck_performance[deck_id] = {
-                        'deck_id': deck_id,
-                        'deck_title': title,
+                d_id = int(deck_id)
+                if d_id not in deck_performance:
+                    deck_performance[d_id] = {
+                        'deck_id': d_id,
+                        'deck_title': str(title),
                         'total_reviews': 0,
                         'correct_reviews': 0
                     }
                 
-                deck_performance[deck_id]['total_reviews'] += total
-                deck_performance[deck_id]['correct_reviews'] += (correct or 0)
+                deck_performance[d_id]['total_reviews'] += total
+                deck_performance[d_id]['correct_reviews'] += (correct or 0)
 
             # Filter weak topics
             weak_topics = []
@@ -88,12 +92,12 @@ class RecommendationEngine:
             return []
     
     @staticmethod
-    def get_study_recommendations(user_id):
+    def get_study_recommendations(user_id: int) -> dict:
         """
         Generate comprehensive study recommendations
         """
         try:
-            recommendations = {
+            recommendations: Dict[str, Any] = {
                 'weak_topics': [],
                 'due_reviews': 0,
                 'suggested_focus': None,
@@ -102,7 +106,8 @@ class RecommendationEngine:
             }
             
             # Get weak topics
-            recommendations['weak_topics'] = RecommendationEngine.get_weak_topics(user_id)
+            weak_topics: list[dict] = RecommendationEngine.get_weak_topics(user_id)
+            recommendations['weak_topics'] = weak_topics
             
             # Count due reviews
             # Note: This checks ALL decks for which the user is the owner, as per SM-2 Model design
@@ -111,7 +116,7 @@ class RecommendationEngine:
             
             # Handle decks owned by user
             owned_decks = Deck.query.filter_by(user_id=user_id).all()
-            due_count = 0
+            due_count: int = 0
             
             for deck in owned_decks:
                 # Safely get due cards
@@ -124,8 +129,9 @@ class RecommendationEngine:
             recommendations['due_reviews'] = due_count
             
             # Suggest focus area
-            if recommendations['weak_topics']:
-                recommendations['suggested_focus'] = recommendations['weak_topics'][0]['deck_title']
+            wt: List[Dict[str, Any]] = recommendations['weak_topics']
+            if wt:
+                recommendations['suggested_focus'] = str(wt[0].get('deck_title', ''))
             elif due_count > 0:
                 recommendations['suggested_focus'] = "Complete your due reviews"
             else:
@@ -133,7 +139,7 @@ class RecommendationEngine:
             
             # Calculate mastered cards (repetitions >= 3)
             # Only for owned decks due to schema limitations
-            mastered_count = db.session.query(Flashcard).join(Deck).filter(
+            mastered_count: int = db.session.query(Flashcard).join(Deck).filter(
                 Deck.user_id == user_id,
                 Flashcard.repetitions >= 3
             ).count()
@@ -178,10 +184,10 @@ class RecommendationEngine:
         try:
             start_date = datetime.utcnow() - timedelta(days=days)
             
-            analytics = {
+            analytics: Dict[str, Any] = {
                 'total_reviews': 0,
                 'correct_reviews': 0,
-                'accuracy': 0,
+                'accuracy': 0.0,
                 'average_response_time': 0,
                 'daily_activity': {},
                 'deck_performance': []
@@ -210,9 +216,11 @@ class RecommendationEngine:
                     if date_key not in analytics['daily_activity']:
                         analytics['daily_activity'][date_key] = {'total': 0, 'correct': 0}
                     
-                    analytics['daily_activity'][date_key]['total'] += 1
+                    # Tell pyre that this is a dict to avoid union type conflicts
+                    day_dict = analytics['daily_activity'][date_key]
+                    day_dict['total'] += 1
                     if review.correct:
-                        analytics['daily_activity'][date_key]['correct'] += 1
+                        day_dict['correct'] += 1
             
             # Get performance by deck (Reuse weak topics logic but without threshold)
             # This is cleaner than looping decks

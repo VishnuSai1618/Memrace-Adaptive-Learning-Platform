@@ -38,13 +38,13 @@
     <main class="main-content">
         <header class="content-header">
             <h1>Upload Study Material</h1>
-            <p>Upload a PDF or paste your notes to generate flashcards</p>
+            <p>Upload a document or paste your notes to generate flashcards</p>
         </header>
 
         <div class="upload-container">
             <!-- Content Type Toggle -->
             <div class="toggle-buttons">
-                <button id="pdfToggle" class="toggle-btn active">📄 Upload PDF</button>
+                <button id="pdfToggle" class="toggle-btn active">📄 Upload Document</button>
                 <button id="textToggle" class="toggle-btn">📝 Paste Text</button>
                 <button id="blankToggle" class="toggle-btn">✨ Blank Deck</button>
             </div>
@@ -63,14 +63,14 @@
                     </div>
 
                     <div class="file-upload-area" id="fileUploadArea">
-                        <input type="file" id="pdfFile" accept=".pdf" hidden>
+                        <input type="file" id="pdfFile" accept=".pdf,.docx,.pptx,.txt" hidden>
                         <div class="upload-placeholder">
                             <div class="upload-icon">📁</div>
-                            <p>Drag and drop your PDF here</p>
+                            <p>Drag and drop your document here</p>
                             <p class="upload-hint">or</p>
                             <button type="button" class="btn-primary"
                                 onclick="document.getElementById('pdfFile').click()">Browse Files</button>
-                            <p class="upload-limit">Maximum file size: 16MB</p>
+                            <p class="upload-limit">Supported: PDF, DOCX, PPTX, TXT · Max 16MB</p>
                         </div>
                         <div id="fileInfo" class="file-info" style="display: none;">
                             <p id="fileName"></p>
