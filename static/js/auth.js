@@ -43,9 +43,11 @@ async function protectPage() {
     }
 }
 
-// Auto-protect dashboard pages
-if (window.location.pathname !== '/' && 
-    window.location.pathname !== '/login' && 
-    window.location.pathname !== '/signup') {
+// Auto-protect dashboard pages — public pages are explicitly whitelisted
+const PUBLIC_PATHS = ['/', '/login', '/signup', '/forgot-password'];
+const isPublicPage = PUBLIC_PATHS.includes(window.location.pathname) ||
+                     window.location.pathname.startsWith('/reset-password/');
+
+if (!isPublicPage) {
     protectPage();
 }

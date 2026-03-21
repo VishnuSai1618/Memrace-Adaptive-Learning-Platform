@@ -120,10 +120,13 @@ async function renderDecksWithReviews() {
                     </div>
                 ` : ''}
                 <div class="deck-actions" onclick="event.stopPropagation()">
-                    <button class="btn-primary" onclick="studyDeck(${deck.id})">Study</button>
+                    <button class="btn-gradient" onclick="studyDeck(${deck.id})">Study</button>
                     <button class="btn-secondary" onclick="takequiz(${deck.id})">Quiz</button>
-                    <button class="btn-secondary" style="border-color: var(--accent-green); color: var(--accent-green);" onclick="window.location.href='/live/host/${deck.id}'">Host Live</button>
-                    <button class="btn-secondary" style="border-color: var(--accent-orange); color: var(--accent-orange);" onclick="publishDeck(${deck.id})">Share</button>
+                    <button class="btn-gradient-outline" onclick="window.location.href='/live/host/${deck.id}'">Host Live</button>
+                    ${deck.is_public 
+                        ? `<button class="btn-secondary" style="border-color: var(--accent-red); color: var(--accent-red);" onclick="unpublishDeck(${deck.id})">Unshare</button>`
+                        : `<button class="btn-secondary" style="border-color: var(--accent-orange); color: var(--accent-orange);" onclick="publishDeck(${deck.id})">Share</button>`
+                    }
                     <button class="btn-secondary" style="border-color: var(--accent-blue); color: var(--accent-blue);" onclick="editDeck(${deck.id})">Edit</button>
                     <button class="btn-secondary" onclick="deleteDeck(${deck.id})">Delete</button>
                 </div>
@@ -150,23 +153,31 @@ async function loadRecommendations() {
         const recommendationsContent = document.getElementById('recommendationsContent');
         if (!recommendationsContent) return;
 
-        // 2. Get AI-powered personalized message (async)
+        // 2. Load cached AI insight (no API call — user must click to generate)
         let aiMessageHTML = '';
         try {
             const aiResponse = await fetch('/api/recommendations/');
             const aiData = await aiResponse.json();
             if (aiData.recommendation) {
+                const generatedAt = aiData.generated_at ? new Date(aiData.generated_at).toLocaleString() : '';
                 aiMessageHTML = `
                     <div style="margin-bottom: 1.5rem; padding: 1rem; background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(30,58,138,0.2) 100%); border-radius: var(--radius-md); border: 1px solid rgba(59,130,246,0.2);">
                         <h4 style="color: #60a5fa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
                             <span>🤖</span> AI Coach Says:
                         </h4>
                         <p style="color: #e2e8f0; line-height: 1.5; font-style: italic;">"${aiData.recommendation}"</p>
+                        <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem;">Generated: ${generatedAt}</p>
+                    </div>
+                `;
+            } else {
+                aiMessageHTML = `
+                    <div style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: var(--radius-md); text-align: center;">
+                        <p style="color: var(--text-muted);">No AI insights yet. Click the button below to generate your first coaching!</p>
                     </div>
                 `;
             }
         } catch (e) {
-            console.error('Failed to load AI recommendation', e);
+            console.error('Failed to load AI insight', e);
         }
 
         // 3. Get upcoming review schedule
@@ -214,6 +225,12 @@ async function loadRecommendations() {
         // Render everything
         recommendationsContent.innerHTML = `
             ${aiMessageHTML}
+            <div style="margin-bottom: 1rem;">
+                <button id="btnGenerateInsights" class="btn-gradient" onclick="generateAIInsights()" 
+                    style="width: 100%; padding: 0.75rem; font-size: 1rem;">
+                    🔄 Generate New Insights
+                </button>
+            </div>
             <h3>📌 Focus: ${recommendations.suggested_focus}</h3>
             ${recommendations.weak_topics.length > 0 ? `
                 <p style="margin-top: 1rem; color: var(--text-secondary);">
@@ -229,6 +246,43 @@ async function loadRecommendations() {
     } catch (error) {
         console.error('Error loading recommendations:', error);
         document.getElementById('recommendationsContent').innerHTML = '<p class="error-text">Failed to load recommendations.</p>';
+    }
+}
+
+// Generate AI Insights on demand
+async function generateAIInsights() {
+    const btn = document.getElementById('btnGenerateInsights');
+    if (!btn) return;
+    
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<div class="loader" style="width: 20px; height: 20px; margin: 0;"></div> Generating...';
+    btn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/recommendations/generate', {
+            method: 'POST'
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Reload the recommendations panel to show the new insight
+            await loadRecommendations();
+        } else if (response.status === 429) {
+            // Cooldown active
+            alert(data.error || 'Please wait before generating new insights.');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        } else {
+            alert(data.error || 'Failed to generate insights.');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error generating AI insights:', error);
+        alert('Error connecting to AI service.');
+        btn.innerHTML = originalText;
+        btn.disabled = false;
     }
 }
 
@@ -308,6 +362,30 @@ async function publishDeck(deckId) {
     } catch (error) {
         console.error('Error publishing deck:', error);
         alert('Error publishing deck');
+    }
+}
+
+async function unpublishDeck(deckId) {
+    if (!confirm('Remove this deck from the Public Repository? Your private copy will be kept.')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/repository/unpublish/${deckId}`, {
+            method: 'POST'
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert('Deck removed from Public Repository.');
+            loadDashboard();
+        } else {
+            alert(data.error || 'Failed to unpublish deck');
+        }
+    } catch (error) {
+        console.error('Error unpublishing deck:', error);
+        alert('Error unpublishing deck');
     }
 }
 

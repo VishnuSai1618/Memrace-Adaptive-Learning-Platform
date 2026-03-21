@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, session
 from models import db
 from models.deck import Deck
 from models.flashcard import Flashcard
+from models.quiz import Quiz
 from models.analytics import PublicDeck
 from routes.auth import login_required
 
@@ -41,6 +42,12 @@ def publish_deck():
         # Verify ownership
         if deck.user_id != session['user_id']:
             return jsonify({'error': 'Unauthorized'}), 403
+        
+        # Validate: deck must have at least one flashcard or one quiz
+        flashcard_count = Flashcard.query.filter_by(deck_id=deck_id).count()
+        quiz_count = Quiz.query.filter_by(deck_id=deck_id).count()
+        if flashcard_count == 0 and quiz_count == 0:
+            return jsonify({'error': 'Cannot publish an empty deck. Add at least one flashcard or quiz first.'}), 400
         
         # Check if already published
         existing_public = PublicDeck.query.filter_by(deck_id=deck_id).first()
@@ -101,6 +108,20 @@ def clone_deck(deck_id):
                 answer=original_fc.answer
             )
             db.session.add(cloned_fc)
+        
+        # Clone quizzes
+        original_quizzes = Quiz.query.filter_by(deck_id=deck_id).all()
+        for original_quiz in original_quizzes:
+            cloned_quiz = Quiz(
+                deck_id=cloned_deck.id,
+                question=original_quiz.question,
+                correct_answer=original_quiz.correct_answer,
+                option_a=original_quiz.option_a,
+                option_b=original_quiz.option_b,
+                option_c=original_quiz.option_c,
+                option_d=original_quiz.option_d
+            )
+            db.session.add(cloned_quiz)
         
         # Increment clone count
         public_deck = PublicDeck.query.filter_by(deck_id=deck_id).first()

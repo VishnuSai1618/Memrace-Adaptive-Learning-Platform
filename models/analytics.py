@@ -90,6 +90,7 @@ class PublicDeck(db.Model):
             'deck_title': self.deck.title if self.deck else None,
             'deck_description': self.deck.description if self.deck else None,
             'flashcard_count': len(self.deck.flashcards) if self.deck and self.deck.flashcards else 0,
+            'quiz_count': len(self.deck.quizzes) if self.deck and self.deck.quizzes else 0,
             'clone_count': self.clone_count,
             'rating': self.rating,
             'published_at': self.published_at.isoformat() if self.published_at else None
@@ -97,3 +98,34 @@ class PublicDeck(db.Model):
     
     def __repr__(self):
         return f'<PublicDeck {self.id}: Deck {self.deck_id}>'
+
+
+class AIInsight(db.Model):
+    """Cached AI-generated study insights for a user"""
+    __tablename__ = 'ai_insights'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    weak_areas_count = db.Column(db.Integer, default=0)
+    accuracy = db.Column(db.Float, default=0.0)
+    generated_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    user = db.relationship('User', backref=db.backref('ai_insights', lazy=True))
+    
+    def __init__(self, user_id, content, weak_areas_count=0, accuracy=0.0):
+        self.user_id = user_id
+        self.content = content
+        self.weak_areas_count = weak_areas_count
+        self.accuracy = accuracy
+        self.generated_at = datetime.utcnow()
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'content': self.content,
+            'weak_areas_count': self.weak_areas_count,
+            'accuracy': self.accuracy,
+            'generated_at': self.generated_at.isoformat() if self.generated_at else None
+        }

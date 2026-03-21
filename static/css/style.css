@@ -1359,3 +1359,216 @@ h3 {
 /* Footer */
 .modern-footer { padding: 3rem 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
 .modern-footer p { color: rgba(255,255,255,0.4); margin-top: 1rem; font-size: 0.9rem; }
+
+/* ===== Premium Gradient & Glow Buttons (21st.dev inspired) ===== */
+
+/* Animated gradient border keyframe */
+@keyframes gradient-rotate {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 152, 0, 0.3), 0 0 30px rgba(255, 184, 77, 0.1); }
+    50%      { box-shadow: 0 0 25px rgba(255, 152, 0, 0.5), 0 0 50px rgba(255, 184, 77, 0.2); }
+}
+
+/* ---- .btn-gradient — The hero button ---- */
+.btn-gradient {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #ff9800, #ffb84d, #f59e0b, #ff9800);
+    background-size: 300% 300%;
+    animation: gradient-rotate 4s ease infinite;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Inner shine accent */
+.btn-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+    z-index: 2;
+}
+
+.btn-gradient:hover::before {
+    left: 125%;
+}
+
+.btn-gradient:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 30px rgba(255, 152, 0, 0.45),
+                0 0 40px rgba(255, 184, 77, 0.2);
+}
+
+.btn-gradient:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 10px rgba(255, 152, 0, 0.3);
+}
+
+/* Disabled state */
+.btn-gradient:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    animation: none;
+    box-shadow: none;
+}
+
+/* ---- .btn-gradient-outline — Bordered variant ---- */
+.btn-gradient-outline {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent-orange);
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    background-image: linear-gradient(var(--dark-bg), var(--dark-bg)),
+                      linear-gradient(135deg, #ff9800, #ffb84d, #f59e0b, #ff9800);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    background-size: 100% 100%, 300% 300%;
+    animation: gradient-rotate 4s ease infinite;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.3s ease,
+                color 0.3s ease;
+}
+
+.btn-gradient-outline:hover {
+    color: #fff;
+    background-image: linear-gradient(135deg, #ff9800, #ffb84d, #f59e0b, #ff9800),
+                      linear-gradient(135deg, #ff9800, #ffb84d, #f59e0b, #ff9800);
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 30px rgba(255, 152, 0, 0.35),
+                0 0 30px rgba(255, 184, 77, 0.15);
+}
+
+.btn-gradient-outline:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* ---- .btn-gamified — For repository clone/CTA buttons ---- */
+.btn-gamified {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary-purple), var(--primary-indigo), var(--accent-orange));
+    background-size: 200% 200%;
+    animation: gradient-rotate 3s ease infinite;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.2);
+    overflow: hidden;
+}
+
+.btn-gamified::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.12) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+}
+
+.btn-gamified:hover::before {
+    left: 125%;
+}
+
+.btn-gamified:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 25px rgba(255, 152, 0, 0.35),
+                0 0 20px rgba(255, 184, 77, 0.15);
+}
+
+.btn-gamified:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* ---- Upgraded .btn-primary with glow ---- */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+}
+
+.btn-primary:hover::before {
+    left: 125%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 30px rgba(255, 152, 0, 0.3),
+                0 0 20px rgba(255, 184, 77, 0.1);
+}
+

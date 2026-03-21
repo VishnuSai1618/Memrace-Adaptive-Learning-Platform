@@ -29,6 +29,15 @@ class Config:
     # Session settings
     PERMANENT_SESSION_LIFETIME = 86400  # 24 hours
     
+    # Mail / SMTP settings (for password reset)
+    MAIL_SERVER   = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
+    MAIL_PORT     = int(os.getenv('MAIL_PORT', 587))
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME', '')
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', '')
+    MAIL_USE_TLS  = os.getenv('MAIL_USE_TLS', 'True') == 'True'
+    MAIL_FROM     = os.getenv('MAIL_USERNAME', '')      # sender address
+    MAIL_FROM_NAME = os.getenv('MAIL_FROM_NAME', 'MEMRACE')
+    
     @staticmethod
     def init_app(app):
         """Initialize application with config"""

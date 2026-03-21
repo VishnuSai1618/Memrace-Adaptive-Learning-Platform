@@ -35,7 +35,8 @@ function renderPublicDecks() {
             <p style="color: var(--text-muted); margin-bottom: 1.5rem;">${publicDeck.deck_description || 'No description provided.'}</p>
             <div class="deck-meta" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">
                 <span>👤 ${publicDeck.author_username}</span>
-                <span>📚 ${publicDeck.flashcard_count} pieces of knowledge</span>
+                <span>📚 ${publicDeck.flashcard_count} cards</span>
+                <span>❓ ${publicDeck.quiz_count || 0} quizzes</span>
                 <span style="color: var(--accent-orange);">📥 ${publicDeck.clone_count} clones</span>
             </div>
             <div class="deck-actions">
@@ -89,7 +90,8 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
             <p style="color: var(--text-muted); margin-bottom: 1.5rem;">${publicDeck.deck_description || 'No description provided.'}</p>
             <div class="deck-meta" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">
                 <span>👤 ${publicDeck.author_username}</span>
-                <span>📚 ${publicDeck.flashcard_count} pieces of knowledge</span>
+                <span>📚 ${publicDeck.flashcard_count} cards</span>
+                <span>❓ ${publicDeck.quiz_count || 0} quizzes</span>
                 <span style="color: var(--accent-orange);">📥 ${publicDeck.clone_count} clones</span>
             </div>
             <div class="deck-actions">

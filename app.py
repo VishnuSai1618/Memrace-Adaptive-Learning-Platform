@@ -75,6 +75,16 @@ def create_app(config_class=Config):
         """Signup page"""
         return render_template('signup.html')
     
+    @app.route('/forgot-password')
+    def forgot_password_page():
+        """Forgot password page"""
+        return render_template('forgot_password.html')
+    
+    @app.route('/reset-password/<token>')
+    def reset_password_page(token):
+        """Reset password page — token is passed into the template for the JS form submit"""
+        return render_template('reset_password.html', token=token)
+    
     @app.route('/dashboard')
     def dashboard():
         """Dashboard page"""
