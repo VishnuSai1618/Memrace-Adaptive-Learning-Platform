@@ -169,4 +169,6 @@ if __name__ == '__main__':
     print("Server starting on http://localhost:5000")
     print("=" * 50)
     # Use socketio.run instead of app.run
-    app.socketio.run(app, debug=True, host='0.0.0.0', port=5000, allow_unsafe_werkzeug=True)
+    #app.socketio.run(app, debug=True, host='0.0.0.0', port=5000, allow_unsafe_werkzeug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.socketio.run(app, host='0.0.0.0', port=port)
