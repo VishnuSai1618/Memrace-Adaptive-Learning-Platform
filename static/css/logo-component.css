@@ -1,0 +1,166 @@
+/* ===== Logo Component (Design System Token) ===== */
+.logo-component {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-component:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 28px rgba(59, 130, 246, 0.25);
+}
+
+/* -- Logo Inner Flex */
+.logo-component__inner {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.logo-component__text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+/* -- Glow Aura */
+.logo-component__glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(59, 130, 246, 0.18), transparent 70%);
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.logo-component:hover .logo-component__glow {
+    opacity: 1;
+}
+
+/* -- Speed Streak */
+.logo-component__streak {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(59, 130, 246, 0.3), rgba(255, 255, 255, 0.12), transparent);
+    transform: skewX(-20deg);
+    animation: logoStreakMove 4s linear infinite;
+    pointer-events: none;
+}
+
+.logo-component:hover .logo-component__streak {
+    animation-duration: 1.2s;
+}
+
+/* -- Pulse Ring */
+.logo-component__pulse {
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    border-radius: inherit;
+    animation: logoPulseRing 3.5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* -- Icon Glow */
+.logo-component__icon {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    transform: scale(1.1);
+    transform-origin: center;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+    color: #ffffff;
+}
+
+/* -- Animations */
+@keyframes logoStreakMove {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 200%;
+    }
+}
+
+@keyframes logoPulseRing {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.4;
+    }
+
+    50% {
+        transform: scale(1.04);
+        opacity: 0.9;
+    }
+}
+
+/* ---- Compact Variant (Sidebar) ---- */
+.logo-component--compact {
+    padding: 8px 14px;
+    border-radius: 10px;
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.2);
+}
+
+.logo-component--compact .logo-component__text {
+    font-size: 1.05rem;
+    letter-spacing: 0.25px;
+}
+
+.logo-component--compact .logo-component__streak {
+    animation-duration: 6s;
+}
+
+.logo-component--compact .logo-component__pulse {
+    animation-duration: 5s;
+}
+
+.logo-component--compact .logo-component__glow {
+    opacity: 0.3;
+}
+
+.logo-component--compact .logo-component__icon {
+    width: 34px;
+    height: 34px;
+}
+
+/* ---- Auth Variant (Centered, Larger) ---- */
+.logo-component--auth {
+    padding: 12px 28px;
+    margin: 0 auto 2rem;
+}
+
+.logo-component--auth .logo-component__text {
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+/* ---- Light Mode Overrides ---- */
+body.light-mode .logo-component__icon {
+    color: #1e293b;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.2));
+}
+
+body.light-mode .logo-component__text {
+    color: #0f172a;
+}

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Host — MEMRACE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+  html, body { height: 100%; margin: 0; padding: 0; }
+/* ═══════════════════════════════════════════════
+   MEMRACE LIVE HOST  —  Design System
+   ═══════════════════════════════════════════════ */
+:root {
+  --q-red:    #E21B3C;
+  --q-blue:   #1368CE;
+  --q-yellow: #D89E00;
+  --q-green:  #26890C;
+  --bg:       #0d0221;
+  --surface:  rgba(255,255,255,0.06);
+  --surface2: rgba(255,255,255,0.10);
+  --border:   rgba(255,255,255,0.12);
+  --text:     #ffffff;
+  --muted:    rgba(255,255,255,0.50);
+  --accent:   #7c3aed;
+  --accent2:  #f59e0b;
+  --radius:   16px;
+  --radius-sm:10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── Top Nav Bar ── */
+.host-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(0,0,0,0.35);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.host-nav .brand {
+  font-size: 1.3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #a855f7, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+.host-nav .nav-badge {
+  background: rgba(124,58,237,0.2);
+  border: 1px solid rgba(124,58,237,0.4);
+  color: #c4b5fd;
+  padding: 0.35rem 0.9rem;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ── Page Wrapper ── */
+.host-page {
+  min-height: calc(100vh - 57px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ══════════════════════════════════════
+   VIEW: WAITING ROOM
+   ══════════════════════════════════════ */
+#viewWaiting {
+  width: 100%;
+  max-width: 920px;
+}
+
+/* PIN card */
+.pin-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+.pin-card::before {
+  content: '';
+  position: absolute;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(124,58,237,0.15), transparent 70%);
+  top: -100px; right: -50px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.pin-card .join-instructions {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+.pin-card .game-pin {
+  font-size: 5.5rem;
+  font-weight: 900;
+  letter-spacing: 10px;
+  color: white;
+  text-shadow: 0 0 40px rgba(124,58,237,0.6);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.pin-card .pin-url {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.pin-card .pin-url span {
+  color: #c4b5fd;
+  font-weight: 600;
+}
+
+/* Players section */
+.players-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+.players-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.players-header .ph-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.players-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.count-badge {
+  background: rgba(124,58,237,0.25);
+  color: #c4b5fd;
+  padding: 0.2rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid rgba(124,58,237,0.3);
+}
+.btn-start {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(124,58,237,0.35);
+  letter-spacing: 0.2px;
+}
+.btn-start:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124,58,237,0.5);
+}
+.btn-start:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.players-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 1.25rem 1.5rem;
+  min-height: 120px;
+  align-content: flex-start;
+}
+.player-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  animation: chipIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.player-chip .avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #db2777);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: white;
+  text-transform: uppercase;
+}
+.empty-players {
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding: 1rem 0;
+  width: 100%;
+  text-align: center;
+}
+
+@keyframes chipIn {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ══════════════════════════════════════
+   VIEW: QUESTION (QUIZ IN PROGRESS)
+   ══════════════════════════════════════ */
+#viewQuestion {
+  width: 100%;
+  max-width: 1100px;
+  display: none;
+}
+
+/* Question card */
+.question-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 2.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+.question-card .q-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+.question-card h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: white;
+}
+
+/* Stats row */
+.stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex: 1;
+  justify-content: center;
+}
+.stat-pill .sp-value {
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+/* Timer ring */
+.timer-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+.timer-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: conic-gradient(#7c3aed 100%, rgba(255,255,255,0.1) 0%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(124,58,237,0.4);
+  transition: background 1s linear;
+}
+.timer-ring .timer-inner {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #0d0221;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.btn-skip {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 0.65rem 1.2rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.btn-skip:hover { color: white; background: var(--surface); }
+
+/* Options grid */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 180px 180px;
+  gap: 1rem;
+}
+.host-option {
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 8px 0 rgba(0,0,0,0.25);
+  overflow: hidden;
+  position: relative;
+}
+.host-option::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0);
+  transition: background 0.2s;
+}
+.opt-A { background-color: var(--q-red); }
+.opt-B { background-color: var(--q-blue); }
+.opt-C { background-color: var(--q-yellow); }
+.opt-D { background-color: var(--q-green); }
+
+.opt-shape {
+  width: 52px; height: 52px;
+  background: rgba(255,255,255,0.25);
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+.shape-triangle { clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+.shape-diamond  { clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
+.shape-circle   { border-radius: 50%; }
+.shape-square   { border-radius: 8px; }
+
+/* ══════════════════════════════════════
+   VIEW: RESULTS
+   ══════════════════════════════════════ */
+#viewResults {
+  width: 100%;
+  max-width: 680px;
+  display: none;
+}
+
+.results-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.results-card .ca-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.results-card .ca-text {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #34d399;
+}
+
+.lb-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  margin-bottom: 1rem;
+}
+.lb-card-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.lb-row {
+  display: flex;
+  align-items: center;
+  padding: 0.85rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  gap: 1rem;
+  font-weight: 600;
+}
+.lb-row:last-child { border-bottom: none; }
+.lb-row .lb-rank {
+  font-size: 1.1rem;
+  font-weight: 900;
+  width: 32px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.lb-row:nth-child(1) .lb-rank { color: #fbbf24; }
+.lb-row:nth-child(2) .lb-rank { color: #94a3b8; }
+.lb-row:nth-child(3) .lb-rank { color: #b45309; }
+.lb-row .lb-name { flex: 1; }
+.lb-row .lb-score {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #a78bfa;
+}
+
+.btn-next-action {
+  width: 100%;
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  color: white;
+  border: none;
+  padding: 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(124,58,237,0.35);
+}
+.btn-next-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124,58,237,0.5);
+}
+</style>
+</head>
+<body>
+<!-- ── Nav ── -->
+<nav class="host-nav">
+  <div class="brand">⚡ MEMRACE Live</div>
+  <div class="nav-badge">Host Dashboard</div>
+</nav>
+
+<div class="host-page">
+
+  <!-- ══ WAITING ROOM ══ -->
+  <div id="viewWaiting" style="width:100%;max-width:920px;">
+
+    <div class="pin-card">
+      <p class="join-instructions">Join at <span style="color:#c4b5fd;font-weight:700;">memrace.app</span> &nbsp;·&nbsp; Quiz PIN:</p>
+      <div class="game-pin" id="displayPin">──────</div>
+      <p class="pin-url">Players can also join via direct link once they have the PIN</p>
+    </div>
+
+    <div class="players-section">
+      <div class="players-header">
+        <div class="ph-left">
+          <h3>Players Joined</h3>
+          <span class="count-badge" id="playerCount">0</span>
+        </div>
+        <button class="btn-start" id="btnStartGame" onclick="startGame()" disabled>
+          Start Quiz →
+        </button>
+      </div>
+      <div class="players-grid" id="playersGrid">
+        <div class="empty-players">Waiting for players to join…</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ QUIZ SCREEN ══ -->
+  <div id="viewQuestion" style="width:100%;max-width:1100px;display:none;">
+
+    <div class="question-card">
+      <p class="q-label">Question</p>
+      <h1 id="currentQuestionText">Loading question…</h1>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-pill">
+        <span>Answers</span>
+        <span class="sp-value" id="answerCount">0</span>
+      </div>
+      <div class="timer-ring" id="timerRing">
+        <div class="timer-inner">
+          <span id="hostTimerText">30</span>
+        </div>
+      </div>
+      <button class="btn-skip" onclick="skipTimer()">Skip ⟩</button>
+    </div>
+
+    <div class="options-grid" id="hostOptionsGrid">
+      <!-- Populated by JS -->
+    </div>
+
+  </div>
+
+  <!-- ══ RESULTS ══ -->
+  <div id="viewResults" style="width:100%;max-width:680px;display:none;">
+
+    <div class="results-card">
+      <p class="ca-label">Correct Answer</p>
+      <p class="ca-text" id="correctAnswerText">—</p>
+    </div>
+
+    <div class="lb-card">
+      <div class="lb-card-header">🏆 Top 5 Leaderboard</div>
+      <div id="leaderboardContainer"><!-- JS --></div>
+    </div>
+
+    <button class="btn-next-action" id="btnNextAction" onclick="nextQuestion()">Next Question →</button>
+
+  </div>
+
+</div>
+
+<!-- ── Scripts ── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+<script>
+const deckId = "{{ deck_id }}";
+const hostId = "{{ session['user_id'] }}";
+
+let sessionId = null;
+let quizQuestions = [];
+let currentQuestionIndex = -1;
+let timer = null;
+let timeLeft = 30;
+let players = [];
+let currentAnswerCount = 0;
+
+const viewWaiting  = document.getElementById('viewWaiting');
+const viewQuestion = document.getElementById('viewQuestion');
+const viewResults  = document.getElementById('viewResults');
+
+function showView(view) {
+    [viewWaiting, viewQuestion, viewResults].forEach(v => v.style.display = 'none');
+    view.style.display = 'block';
+}
+
+// ── Timer ring animation ──
+function updateTimerRing(remaining, total) {
+    const pct = (remaining / total) * 100;
+    const color = pct > 50 ? '#7c3aed' : pct > 20 ? '#f59e0b' : '#E21B3C';
+    document.getElementById('timerRing').style.background =
+        `conic-gradient(${color} ${pct}%, rgba(255,255,255,0.08) 0%)`;
+    document.getElementById('hostTimerText').textContent = remaining;
+    document.getElementById('hostTimerText').style.color = pct <= 20 ? '#E21B3C' : 'white';
+}
+
+// ── Socket ──
+const socket = io();
+
+socket.on('connect', () => {
+    socket.emit('host_create_session', { host_id: hostId, deck_id: deckId });
+});
+
+socket.on('session_created', (data) => {
+    sessionId = data.session_id;
+    document.getElementById('displayPin').textContent = data.pin;
+});
+
+socket.on('player_joined', (data) => {
+    players.push(data.participant);
+    document.getElementById('playerCount').textContent = players.length;
+    document.getElementById('btnStartGame').disabled = false;
+
+    const grid = document.getElementById('playersGrid');
+    const empty = grid.querySelector('.empty-players');
+    if (empty) empty.remove();
+
+    const chip = document.createElement('div');
+    chip.className = 'player-chip';
+    chip.innerHTML = `
+        <div class="avatar">${data.participant.display_name.charAt(0)}</div>
+        <span>${data.participant.display_name}</span>`;
+    grid.appendChild(chip);
+});
+
+socket.on('answer_received', (data) => {
+    currentAnswerCount++;
+    document.getElementById('answerCount').textContent = currentAnswerCount;
+    if (currentAnswerCount >= players.length) skipTimer();
+});
+
+// ── Quiz flow ──
+async function loadQuizData() {
+    try {
+        const resp = await fetch(`/api/quizzes/deck/${deckId}`);
+        const data = await resp.json();
+        quizQuestions = data.quizzes;
+    } catch (e) { console.error('Error fetching quiz data', e); }
+}
+
+async function startGame() {
+    if (players.length === 0) return;
+    await loadQuizData();
+    if (quizQuestions.length === 0) {
+        alert('This deck has no quiz questions! Please add some first.');
+        return;
+    }
+    socket.emit('host_start_quiz', { session_id: sessionId });
+    nextQuestion();
+}
+
+function nextQuestion() {
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex >= quizQuestions.length) {
+        endSession();
+        return;
+    }
+
+    currentAnswerCount = 0;
+    document.getElementById('answerCount').textContent = 0;
+
+    const q = quizQuestions[currentQuestionIndex];
+    socket.emit('host_show_question', {
+        session_id: sessionId,
+        question_index: currentQuestionIndex,
+        question: q
+    });
+
+    document.getElementById('currentQuestionText').textContent = q.question;
+
+    const styles = [
+        { id: 'A', cls: 'opt-A', shape: 'shape-triangle', color: '#E21B3C' },
+        { id: 'B', cls: 'opt-B', shape: 'shape-diamond',  color: '#1368CE' },
+        { id: 'C', cls: 'opt-C', shape: 'shape-circle',   color: '#D89E00' },
+        { id: 'D', cls: 'opt-D', shape: 'shape-square',   color: '#26890C' }
+    ];
+
+    let rawOptions = [];
+    if (q.options) {
+        if (Array.isArray(q.options)) {
+            rawOptions = q.options;
+        } else {
+            for (const [, val] of Object.entries(q.options)) {
+                rawOptions.push(typeof val === 'string' ? val : String(val));
+            }
+        }
+    }
+
+    const grid = document.getElementById('hostOptionsGrid');
+    grid.innerHTML = '';
+    rawOptions.slice(0, 4).forEach((text, i) => {
+        if (!text) return;
+        const s = styles[i];
+        const div = document.createElement('div');
+        div.className = `host-option ${s.cls}`;
+        div.style.backgroundColor = s.color;
+        div.innerHTML = `<div class="opt-shape ${s.shape}"></div><span>${text}</span>`;
+        grid.appendChild(div);
+    });
+
+    showView(viewQuestion);
+
+    timeLeft = 30;
+    updateTimerRing(30, 30);
+    if (timer) clearInterval(timer);
+    timer = setInterval(() => {
+        timeLeft--;
+        updateTimerRing(timeLeft, 30);
+        if (timeLeft <= 0) skipTimer();
+    }, 1000);
+}
+
+function skipTimer() {
+    if (timer) clearInterval(timer);
+    const q = quizQuestions[currentQuestionIndex];
+    socket.emit('host_show_results', { session_id: sessionId, quiz_id: q.id });
+}
+
+socket.on('question_results', (data) => {
+    document.getElementById('correctAnswerText').textContent = data.correct_answer;
+
+    const container = document.getElementById('leaderboardContainer');
+    container.innerHTML = '';
+    data.leaderboard.forEach((p, idx) => {
+        const medals = ['🥇','🥈','🥉'];
+        container.innerHTML += `
+            <div class="lb-row">
+                <span class="lb-rank">${medals[idx] || (idx + 1)}</span>
+                <span class="lb-name">${p.display_name}</span>
+                <span class="lb-score">${p.score.toLocaleString()} pts</span>
+            </div>`;
+    });
+
+    showView(viewResults);
+});
+
+function endSession() {
+    socket.emit('host_end_session', { session_id: sessionId });
+}
+
+socket.on('session_finished', (data) => {
+    document.getElementById('correctAnswerText').textContent = 'Final Rankings';
+
+    const container = document.getElementById('leaderboardContainer');
+    container.innerHTML = '';
+    data.leaderboard.forEach((p, idx) => {
+        const medals = ['🥇','🥈','🥉'];
+        container.innerHTML += `
+            <div class="lb-row">
+                <span class="lb-rank">${medals[idx] || (idx + 1)}</span>
+                <span class="lb-name">${p.display_name}</span>
+                <span class="lb-score">${p.score.toLocaleString()} pts</span>
+            </div>`;
+    });
+
+    const btn = document.getElementById('btnNextAction');
+    btn.textContent = '← Back to Dashboard';
+    btn.onclick = () => { window.location.href = '/dashboard'; };
+    showView(viewResults);
+});
+</script>
+</body>
+</html>

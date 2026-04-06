@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Login - MEMRACE AI{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                {% with logo_variant='auth' %}{% include '_logo.html' %}{% endwith %}
+            </div>
+            <div class="auth-header">
+                <h1>Welcome Back</h1>
+                <p>Login to continue your learning journey</p>
+            </div>
+
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="••••••••">
+                </div>
+
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+                <button type="submit" class="btn-gradient btn-full">Login</button>
+
+                <div style="text-align: center; margin-top: 0.75rem;">
+                    <a href="/forgot-password" style="
+                        color: rgba(96,165,250,0.7); font-size: 0.875rem; text-decoration: none;
+                        transition: color 0.2s;
+                    "
+                    onmouseover="this.style.color='#60A5FA'"
+                    onmouseout="this.style.color='rgba(96,165,250,0.7)'"
+                    >Forgot password?</a>
+                </div>
+            </form>
+
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="/signup">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorDiv = document.getElementById('errorMessage');
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Redirect to dashboard
+                window.location.href = '/dashboard';
+            } else {
+                errorDiv.textContent = data.error || 'Login failed';
+                errorDiv.style.display = 'block';
+            }
+        } catch (error) {
+            errorDiv.textContent = 'An error occurred. Please try again.';
+            errorDiv.style.display = 'block';
+        }
+    });
+</script>
+{% endblock %}

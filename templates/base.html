@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Flashcard Learning System{% endblock %}</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logo-component.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Theme toggle: load early to prevent flash of wrong theme -->
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+    <style>
+        /* ── Theme Toggle Button ── */
+        #theme-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+            padding: 0.4rem 0.75rem;
+            font-size: 1.1rem;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+            line-height: 1;
+        }
+        #theme-toggle-btn.dragging {
+            cursor: grabbing !important;
+            transition: none !important;
+            transform: scale(1.1);
+        }
+        #theme-toggle-btn:hover:not(.dragging) {
+            background: rgba(255, 255, 255, 0.16);
+            transform: scale(1.1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+        }
+        body.light-mode #theme-toggle-btn {
+            background: rgba(0, 0, 0, 0.06);
+            border-color: rgba(0, 0, 0, 0.12);
+        }
+        body.light-mode #theme-toggle-btn:hover {
+            background: rgba(0, 0, 0, 0.12);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Global theme toggle — visible on every page -->
+    <button id="theme-toggle-btn" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+
+    {% block body %}{% endblock %}
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
