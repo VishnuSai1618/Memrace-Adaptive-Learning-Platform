@@ -1,13 +1,15 @@
 # MEMRACE – AI-Powered Adaptive Learning Platform
+# MEMRACE – AI-Powered Adaptive Learning Platform
+
 <p align="center">
-  <a href="https://memrace-adaptive-learning-platform.onrender.com/">
-    <img src="https://img.shields.io/badge/🌐%20Live%20Demo-Open%20App-blue?style=for-the-badge&logo=google-chrome&logoColor=white"/>
-  </a>
-  <a href="#">
-    <img src="https://img.shields.io/badge/📘%20Documentation-Read%20Docs-black?style=for-the-badge"/>
+  <a href="https://memrace-adaptive-learning-platform.onrender.com/" target="_blank">
+    <img src="https://img.shields.io/badge/🚀%20Live%20Demo-View%20Project-blue?style=for-the-badge&logo=google-chrome&logoColor=white" />
   </a>
 </p>
+
 > 🚀 Try the live application instantly without setup
+
+
 MEMRACE is an intelligent web-based learning platform that helps students study more effectively using **AI-generated flashcards, quizzes, and real-time live quiz sessions**.
 
 The system adapts to a student's performance and dynamically adjusts the learning experience to improve knowledge retention.
