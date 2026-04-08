@@ -1,5 +1,4 @@
 # MEMRACE – AI-Powered Adaptive Learning Platform
-# MEMRACE – AI-Powered Adaptive Learning Platform
 
 <p align="center">
   <a href="https://memrace-adaptive-learning-platform.onrender.com/" target="_blank">
